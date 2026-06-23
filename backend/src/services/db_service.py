@@ -1,16 +1,21 @@
 import sqlite3
 import json
 import logging
+import os
 from typing import Dict, List, Any, Optional
 
 logger = logging.getLogger(__name__)
+
+# Use /app/data/ when running in Docker (writable directory),
+# fall back to current directory for local development
+_DEFAULT_DB_PATH = "/app/data/jobs.db" if os.path.isdir("/app/data") else "jobs.db"
 
 class DbService:
     """
     Zero-cost database service using Python's built-in SQLite.
     Stores audit jobs and results in a local 'jobs.db' file.
     """
-    def __init__(self, db_path: str = "jobs.db"):
+    def __init__(self, db_path: str = _DEFAULT_DB_PATH):
         self.db_path = db_path
         self._init_db()
 

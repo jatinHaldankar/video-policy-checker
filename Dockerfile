@@ -24,11 +24,15 @@ COPY . .
 
 # Create a non-root user for security
 RUN useradd -m myuser
+
+# Create a dedicated writable directory ONLY for the database
+# App code stays read-only — myuser cannot modify application files
+RUN mkdir -p /app/data && chown myuser:myuser /app/data
+
 USER myuser
 
 # Expose the port the app runs on
 EXPOSE 8000
 
 # Command to run the application
-# We use uvicorn for the FastAPI server
 CMD ["uvicorn", "backend.src.api.server:app", "--host", "0.0.0.0", "--port", "8000"]
