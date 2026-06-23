@@ -1,0 +1,39 @@
+[project]
+name = "pharma-video-ad-review"
+version = "2.0.0"
+description = "AI-powered MLR compliance review for pharmaceutical video advertisements (FDA 21 CFR §202)"
+readme = "README.md"
+requires-python = ">= 3.10"
+dependencies = [
+    # Azure Services
+    "azure-identity>=1.25.3",
+    "azure-monitor-opentelemetry>=1.8.2",
+    "azure-search-documents>=12.0.0",
+    "azure-storage-blob>=12.28.0",
+    "azure-ai-documentintelligence>=1.0.2",
+
+    # API & Server
+    "fastapi>=0.136.1",
+    "uvicorn>=0.46.0",
+    "python-multipart>=0.0.20",
+    "jinja2>=3.1.2",
+    "python-dotenv>=1.2.2",
+    "pydantic>=2.13.3",
+
+    # LangChain & Graph
+    "langchain>=1.2.17",
+    "langchain-openai>=0.3.0",
+    "langchain-community>=0.4.1",
+    "langchain-text-splitters>=1.1.2",
+    "langgraph>=1.1.10",
+    "langsmith>=0.8.0",
+
+    # Observability
+    "opentelemetry-instrumentation-fastapi>=0.61b0",
+
+    # Utilities
+    "requests>=2.33.1",
+    "pandas>=2.3.3",
+    "sentence-transformers>=5.4.1",
+]
+

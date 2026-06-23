@@ -1,0 +1,32 @@
+# Core API & Server
+fastapi
+uvicorn
+python-multipart
+python-dotenv
+pydantic
+pydantic-settings
+jinja2
+
+# LangChain & Graph
+langchain
+langchain-openai
+langchain-community
+langchain-text-splitters
+langgraph
+langsmith
+
+# Azure Services
+azure-identity
+azure-storage-blob
+azure-search-documents
+azure-ai-documentintelligence
+azure-monitor-opentelemetry
+opentelemetry-instrumentation-fastapi
+
+# Utilities
+requests
+pypdf
+python-docx
+pandas
+yt-dlp
+sentence-transformers

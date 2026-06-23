@@ -1,0 +1,39 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+.venv/
+venv/
+
+# Environment variables (NEVER commit secrets)
+.env
+
+# Local database (gets recreated automatically)
+jobs.db
+
+# Test videos
+*.mp4
+*.avi
+*.mov
+
+# uv
+.uv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# for reference only
+questions.md
+pharma_policy_analyser

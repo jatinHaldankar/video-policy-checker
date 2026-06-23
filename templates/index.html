@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PharmaGuard AI — MLR Compliance Reviewer</title>
+    <meta name="description"
+        content="AI-powered FDA 21 CFR Part 202 compliance review for pharmaceutical video advertisements and promotional materials.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <h1>💊 PharmaGuard AI</h1>
+            <p>FDA 21 CFR Part 202 · MLR Compliance Review for Pharma Ads &amp; Promotional Materials</p>
+        </header>
+
+        <main class="main-content">
+            <section class="upload-section">
+                <div class="glass-panel">
+                    <h2>Upload Pharma Asset</h2>
+                    <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">
+                        Supports video ads (.mp4, .mov, .avi) and documents (.pdf, .docx, .jpg, .png)
+                    </p>
+                    <form id="uploadForm" class="upload-form">
+                        <div class="file-input-wrapper">
+                            <input type="file" id="videoFile" name="video_file" required class="file-input"
+                                accept=".mp4,.mov,.avi,.mkv,.wmv,.pdf,.docx,.doc,.txt,.jpg,.jpeg,.png,.ppt,.pptx">
+                            <div class="file-input-ui">
+                                <span class="file-icon">💊</span>
+                                <span id="fileNameDisplay" class="file-name-display">Choose a pharma video or
+                                    document...</span>
+                            </div>
+                        </div>
+                        <input type="text" id="videoName" name="video_name"
+                            placeholder="Campaign / asset name (optional)" class="text-input">
+                        <button type="submit" id="submitBtn" class="primary-button">Run MLR Compliance Audit</button>
+                    </form>
+                    <div id="uploadStatus" class="status-message hidden"></div>
+                </div>
+            </section>
+
+            <section class="results-section hidden" id="resultsSection">
+                <div class="glass-panel">
+                    <div class="results-header">
+                        <h2>Audit Results <span id="jobStatusBadge" class="badge">Processing</span></h2>
+                        <div class="job-id-display">Job ID: <span id="jobIdDisplay"></span></div>
+                    </div>
+
+                    <div id="loadingIndicator" class="loading-indicator">
+                        <div class="spinner"></div>
+                        <p>Running FDA compliance analysis... This may take a few minutes for video files.</p>
+                    </div>
+
+                    <div id="resultsContent" class="hidden">
+                        <div class="summary-card">
+                            <h3>MLR Verdict</h3>
+                            <div id="finalStatus" class="final-status-badge"></div>
+                            <p id="finalReport" class="final-report"></p>
+                        </div>
+
+                        <div class="tabs">
+                            <button class="tab-btn active" data-target="issuesTab">⚠️ Compliance Issues</button>
+                            <button class="tab-btn" data-target="checksTab">✅ Pharma Checks</button>
+                        </div>
+
+                        <div id="issuesTab" class="tab-content active">
+                            <ul id="issuesList" class="issue-list"></ul>
+                        </div>
+
+                        <div id="checksTab" class="tab-content hidden">
+                            <ul id="checksList" class="check-list"></ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

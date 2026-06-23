@@ -1,0 +1,36 @@
+# Never bake secrets into the Docker image
+.env
+
+# Virtual environment - Docker installs its own
+.venv/
+
+# Python cache files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# uv lock / cache
+uv.lock
+.uv/
+
+# Local test videos
+*.mp4
+
+# Local SQLite database
+jobs.db
+
+# GitHub Actions
+.github/
+
+# Git
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+
+# README
+README.md
