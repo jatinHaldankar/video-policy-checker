@@ -8,7 +8,8 @@ from backend.src.services.video_indexer import VideoIndexerService
 from backend.src.services.blob_service import BlobService
 from backend.src.config import settings
 from langchain_core.messages import SystemMessage, HumanMessage
-
+import os
+from pathlib import Path
 
 video_index_name = settings.AZURE_SEARCH_VIDEO_INDEX_NAME
 
