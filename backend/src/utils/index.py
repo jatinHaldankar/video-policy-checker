@@ -22,14 +22,11 @@ from azure.search.documents.indexes.models import (
     SemanticSearch,
 )
 from azure.core.credentials import AzureKeyCredential
-from dotenv import load_dotenv
-import os
+from backend.src.config import settings
 
-load_dotenv()
-
-endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
-key = os.getenv("AZURE_SEARCH_API_KEY")
-index_name = os.getenv("AZURE_SEARCH_VIDEO_INDEX_NAME", "video-policy-checker-index")
+endpoint = settings.AZURE_SEARCH_ENDPOINT
+key = settings.AZURE_SEARCH_API_KEY
+index_name = settings.AZURE_SEARCH_VIDEO_INDEX_NAME
 
 credential = AzureKeyCredential(key)
 

@@ -1,5 +1,4 @@
 import json
-import os
 import logging
 
 from backend.src.graph.state import VideoAuditState, ComplianceIssue, PharmaCheck
@@ -9,9 +8,7 @@ from backend.src.services.video_indexer import VideoIndexerService
 from backend.src.services.blob_service import BlobService
 from backend.src.config import settings
 from langchain_core.messages import SystemMessage, HumanMessage
-from dotenv import load_dotenv
-from pathlib import Path
-load_dotenv()
+
 
 video_index_name = settings.AZURE_SEARCH_VIDEO_INDEX_NAME
 
@@ -22,6 +19,37 @@ blob_service = BlobService()
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
+video_index_name = settings.AZURE_SEARCH_VIDEO_INDEX_NAME
+
+# Lazy-initialized services — created on first use, NOT at import time.
+# This prevents the server from crashing at startup if credentials are missing.
+_llm_service = None
+_llm = None
+_search_service = None
+blob_service = BlobService()
+
+
+def _get_llm_service():
+    global _llm_service
+    if _llm_service is None:
+        _llm_service = LLMService()
+    return _llm_service
+
+
+def _get_llm():
+    global _llm
+    if _llm is None:
+        _llm = _get_llm_service().get_llm()
+    return _llm
+
+
+def _get_search_service():
+    global _search_service
+    if _search_service is None:
+        _search_service = SearchService(index_name=video_index_name)
+    return _search_service
+
 
 
 # ---------------------------------------------------------------------------
@@ -157,8 +185,8 @@ def pharma_audit_node(state: VideoAuditState) -> dict:
         f"pharmaceutical drug advertisement FDA compliance requirements {query_context}"
     )
 
-    embedding = llm_service.embed_text(query)
-    docs = search_service.hybrid_search(query, embedding)
+    embedding = _get_llm_service().embed_text(query)
+    docs = _get_search_service().hybrid_search(query, embedding)
 
     retrieved_rules = ""
     for doc in docs:
@@ -197,7 +225,7 @@ ON-SCREEN TEXT (OCR):
     )
 
     try:
-        response = llm.invoke([system_message, human_message])
+        response = _get_llm().invoke([system_message, human_message])
         raw = response.content.strip()
 
         # Strip markdown code fences if LLM wraps response

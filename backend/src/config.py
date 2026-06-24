@@ -1,54 +1,53 @@
-import os
 from typing import Optional
-from dotenv import load_dotenv
-
-load_dotenv(override=True)
+from pydantic_settings import BaseSettings
 
 
-class Settings:
+class Settings(BaseSettings):
     """
     Centralized configuration settings for the PharmaGuard AI application.
+    Reads from environment variables at runtime (not at class definition time).
+    Automatically loads from .env file in local development.
     """
 
     # Azure OpenAI
-    AZURE_OPENAI_KEY = os.getenv("AZURE_OPENAI_KEY")
-    AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
-    AZURE_OPENAI_VERSION = os.getenv("AZURE_OPENAI_VERSION", "2024-02-15-preview")
-    AZURE_OPENAI_DEPLOYMENT = os.getenv("AZURE_OPENAI_DEPLOYMENT")
-    AZURE_OPENAI_EMBED_DEPLOYMENT = os.getenv("AZURE_OPENAI_EMBED_DEPLOYMENT")
+    AZURE_OPENAI_KEY: Optional[str] = None
+    AZURE_OPENAI_ENDPOINT: Optional[str] = None
+    AZURE_OPENAI_VERSION: str = "2024-02-15-preview"
+    AZURE_OPENAI_DEPLOYMENT: Optional[str] = None
+    AZURE_OPENAI_EMBED_DEPLOYMENT: Optional[str] = None
 
     # Azure AI Search
-    AZURE_SEARCH_ENDPOINT = os.getenv("AZURE_SEARCH_ENDPOINT")
-    AZURE_SEARCH_API_KEY = os.getenv("AZURE_SEARCH_API_KEY")
-    AZURE_SEARCH_VIDEO_INDEX_NAME = os.getenv(
-        "AZURE_SEARCH_VIDEO_INDEX_NAME", "video-policy-checker-index"
-    )
+    AZURE_SEARCH_ENDPOINT: Optional[str] = None
+    AZURE_SEARCH_API_KEY: Optional[str] = None
+    AZURE_SEARCH_VIDEO_INDEX_NAME: str = "video-policy-checker-index"
 
     # Azure Video Indexer
-    AZURE_VI_NAME = os.getenv("AZURE_VI_NAME")
-    AZURE_VI_LOCATION = os.getenv("AZURE_VI_LOCATION", "eastasia")
-    AZURE_VI_ACCOUNT_ID = os.getenv("AZURE_VI_ACCOUNT_ID")
-    AZURE_RESOURCE_GROUP = os.getenv("AZURE_RESOURCE_GROUP")
-    AZURE_SUBSCRIPTION_ID = os.getenv("AZURE_SUBSCRIPTION_ID")
+    AZURE_VI_NAME: Optional[str] = None
+    AZURE_VI_LOCATION: str = "eastasia"
+    AZURE_VI_ACCOUNT_ID: Optional[str] = None
+    AZURE_RESOURCE_GROUP: Optional[str] = None
+    AZURE_SUBSCRIPTION_ID: Optional[str] = None
 
     # Azure Document Intelligence
-    AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT = os.getenv(
-        "AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT"
-    )
-    AZURE_DOCUMENT_INTELLIGENCE_KEY = os.getenv("AZURE_DOCUMENT_INTELLIGENCE_KEY")
+    AZURE_DOCUMENT_INTELLIGENCE_ENDPOINT: Optional[str] = None
+    AZURE_DOCUMENT_INTELLIGENCE_KEY: Optional[str] = None
 
     # Azure Storage
-    AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING")
-    AZURE_STORAGE_CONTAINER_NAME = os.getenv(
-        "AZURE_STORAGE_CONTAINER_NAME", "regulations"
-    )
+    AZURE_STORAGE_CONNECTION_STRING: Optional[str] = None
+    AZURE_STORAGE_CONTAINER_NAME: str = "pharma-regulations"
 
     # Database
-    DATABASE_URL: Optional[str] = os.getenv("DATABASE_URL")
+    DATABASE_URL: Optional[str] = None
 
     # App Settings
-    CHUNK_SIZE = 1000
-    CHUNK_OVERLAP = 150
+    CHUNK_SIZE: int = 1000
+    CHUNK_OVERLAP: int = 150
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+        extra = "ignore"          # Ignore unknown env vars (e.g. system vars)
+        case_sensitive = False    # AZURE_OPENAI_KEY == azure_openai_key
 
 
 settings = Settings()

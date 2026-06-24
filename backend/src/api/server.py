@@ -10,9 +10,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
-from dotenv import load_dotenv
-
-load_dotenv(override=True)
 
 from backend.src.api.telemetry import setup_telemetry
 from backend.src.graph.workflow import app as compliance_graph
