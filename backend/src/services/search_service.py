@@ -10,6 +10,10 @@ logger = logging.getLogger(__name__)
 class SearchService:
     def __init__(self, index_name: str = None):
         self.index_name = index_name or settings.AZURE_SEARCH_VIDEO_INDEX_NAME
+        if not settings.AZURE_SEARCH_API_KEY or not settings.AZURE_SEARCH_ENDPOINT:
+            logger.warning("Azure Search credentials missing. SearchService will not be available.")
+            self.search_client = None
+            return
         self.search_client = SearchClient(
             endpoint=settings.AZURE_SEARCH_ENDPOINT,
             credential=AzureKeyCredential(settings.AZURE_SEARCH_API_KEY),

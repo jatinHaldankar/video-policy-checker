@@ -11,12 +11,6 @@ from langchain_core.messages import SystemMessage, HumanMessage
 import os
 from pathlib import Path
 
-video_index_name = settings.AZURE_SEARCH_VIDEO_INDEX_NAME
-
-llm_service = LLMService()
-llm = llm_service.get_llm()
-search_service = SearchService(index_name=video_index_name)
-blob_service = BlobService()
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
@@ -28,8 +22,7 @@ video_index_name = settings.AZURE_SEARCH_VIDEO_INDEX_NAME
 _llm_service = None
 _llm = None
 _search_service = None
-blob_service = BlobService()
-
+_blob_service = None
 
 def _get_llm_service():
     global _llm_service
@@ -51,6 +44,12 @@ def _get_search_service():
         _search_service = SearchService(index_name=video_index_name)
     return _search_service
 
+
+def _get_blob_service():
+    global _blob_service
+    if _blob_service is None:
+        _blob_service = BlobService()
+    return _blob_service
 
 
 # ---------------------------------------------------------------------------
@@ -92,7 +91,7 @@ def upload_node(state: VideoAuditState) -> dict:
             vi_service = VideoIndexerService()
 
             # --- Generate SAS URL for Video Indexer ---
-            sas_url = blob_service.generate_sas_url(staging_container, blob_name)
+            sas_url = _get_blob_service().generate_sas_url(staging_container, blob_name)
 
             # --- Upload to Azure Video Indexer via URL ---
             azure_vi_id = vi_service.upload_video_from_url(sas_url, video_name)
@@ -117,7 +116,7 @@ def upload_node(state: VideoAuditState) -> dict:
             doc_intel = DocumentIntelligenceService()
 
             logger.info(f"Downloading document from Blob Storage...")
-            content = blob_service.download_blob(staging_container, blob_name)
+            content = _get_blob_service().download_blob(staging_container, blob_name)
 
             logger.info(
                 f"Extracting document text using Azure Document Intelligence..."
@@ -276,6 +275,6 @@ def cleanup_node(state: VideoAuditState) -> dict:
 
     if blob_name:
         logger.info(f"Cleaning up staged blob: {blob_name}")
-        blob_service.delete_blob(staging_container, blob_name)
+        _get_blob_service().delete_blob(staging_container, blob_name)
 
     return {}
